@@ -1,1 +1,6 @@
-#
+# IDE generatred files
+.idea/
+vendor/
+
+# Tests
+.phpunit.result.cache

@@ -1,0 +1,24 @@
+{
+  "name": "imdhemy/alexander-http",
+  "description": "Basic Http components required for building REST API endpoints required by Alexander Wordpress theme.",
+  "type": "library",
+  "license": "GPL2",
+  "authors": [
+    {
+      "name": "imdhemy",
+      "email": "imdhemy@gmail.com"
+    }
+  ],
+  "require": {},
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Alexander\\Http\\": "src"
+    },
+    "classmap": [
+      "src/"
+    ]
+  }
+}
