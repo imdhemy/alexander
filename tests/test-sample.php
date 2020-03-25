@@ -5,11 +5,13 @@
  * @package Alexander
  */
 
+use Tests\TestCase;
+
 /**
  * Sample test case.
  * @group sample
  */
-class SampleTest extends WP_UnitTestCase
+class SampleTest extends TestCase
 {
 
     /**

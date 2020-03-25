@@ -11,5 +11,8 @@
         <testsuite name="Components">
             <directory suffix="Test.php">./components</directory>
         </testsuite>
+        <testsuite name="Theme">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

@@ -7,7 +7,7 @@ use Macedonia\Route\Route;
  * Class RouteTests
  * @group route
  */
-final class RouteTest extends WP_UnitTestCase
+final class RouteTest extends \Tests\TestCase
 {
     /**
      * @test
