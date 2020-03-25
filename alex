@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . "/vendor/autoload.php";
+
+use Symfony\Component\Console\Application;
+
+// create console app
+$console = new Application();
+
+// Load commands
+$commands_dir = __DIR__ . "/src/Commands/";
+$pattern = $commands_dir . "*.php";
+$commandFiles = glob($pattern);
+$classNames = [];
+foreach ($commandFiles as $filePath) {
+    $classNames[] = basename($filePath, ".php");
+}
+$concreteClasses = array_diff($classNames, ["Command"]);
+
+// init commands
+$commands = array_map(function (string $className) {
+    $class = "\Alexander\\Commands\\" . $className;
+    return new $class();
+}, $concreteClasses);
+
+// add commands
+$console->addCommands($commands);
+
+// run console app
+$console->run();
