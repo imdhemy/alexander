@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Alexander\Http\Route;
+namespace Macedonia\Route;
 
 /**
  * Interface RouteContract
@@ -13,7 +13,7 @@ interface RouteContract
      * @param  string  $path
      * @param  string  $handler
      */
-    public static function get(string $path, string $handler):void;
+    public static function get(string $path, string $handler): void;
 
     /**
      * @param  string  $path
@@ -31,19 +31,19 @@ interface RouteContract
      * @param  string  $path
      * @param  string  $handler
      */
-    public static function delete(string $path, string $handler): void ;
+    public static function delete(string $path, string $handler): void;
 
     /**
      * @param  string  $path
      * @param  string  $handler
      */
-    public static function options(string $path, string $handler): void ;
+    public static function options(string $path, string $handler): void;
 
     /**
      * @param  string  $path
      * @param  string  $handler
      */
-    public static function head(string $path, string $handler): void ;
+    public static function head(string $path, string $handler): void;
 
     /**
      * Registers a REST API route.

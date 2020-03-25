@@ -1,12 +1,13 @@
 <?php
 
-namespace Alexander\Http\Route;
+namespace Macedonia\Route;
 
 /**
  * Class Route
  * @package Alexander\Http\Route
  */
-class Route implements RouteContract {
+class Route implements RouteContract
+{
 
     /**
      * Method names
@@ -104,9 +105,9 @@ class Route implements RouteContract {
 
         add_action('rest_api_init', function () use ($endPoints) {
             $namespace = static::$namespace;
-            foreach ($endPoints as $endPoint){
+            foreach ($endPoints as $endPoint) {
                 $route = $endPoint['route'];
-                $args = $endPoint['args'];
+                $args  = $endPoint['args'];
                 register_rest_route($namespace, $route, $args);
             }
         });
@@ -124,6 +125,7 @@ class Route implements RouteContract {
 
     /**
      * Extracts callback elements
+     *
      * @param  string  $handler
      *
      * @return array['class', 'method']
@@ -131,10 +133,11 @@ class Route implements RouteContract {
     private static function extractCallback(string $handler): array
     {
         $handlerParts = explode("@", $handler, 2);
-        $class = $handlerParts[0];
-        $class = static::controllerHasStandardNamespace($class) ?
+        $class        = $handlerParts[0];
+        $class        = static::controllerHasStandardNamespace($class) ?
             sprintf("%s\\%s", static::$controllersNamespace, $class) : $class;
-        $method = $handlerParts[1];
+        $method       = $handlerParts[1];
+
         return compact('class', 'method');
     }
 
@@ -143,14 +146,16 @@ class Route implements RouteContract {
      *
      * @return bool
      */
-    private static function controllerHasStandardNamespace(string $className): bool {
+    private static function controllerHasStandardNamespace(string $className): bool
+    {
         $namespace = str_replace($className, $className, "");
-        if (empty($namespace)){
+        if (empty($namespace)) {
             return true;
         }
-        if($namespace === static::$controllersNamespace){
+        if ($namespace === static::$controllersNamespace) {
             return true;
         }
+
         return false;
     }
 
@@ -159,13 +164,13 @@ class Route implements RouteContract {
      * @param  array['class', 'method']  $callback
      * @param  string  $httpMethod
      */
-    private static function addEndPoint(string $route, array $callback, string $httpMethod):void
+    private static function addEndPoint(string $route, array $callback, string $httpMethod): void
     {
-        $class = $callback['class'];
-        $method = $callback['method'];
-        $args = [
-            'methods'   => $httpMethod,
-            'callback' => [$class, $method]
+        $class               = $callback['class'];
+        $method              = $callback['method'];
+        $args                = [
+            'methods'  => $httpMethod,
+            'callback' => [$class, $method],
         ];
         static::$endPoints[] = compact('route', 'args');
     }
@@ -173,7 +178,8 @@ class Route implements RouteContract {
     /**
      * @return array
      */
-    public static function endPointsArray(): array{
+    public static function endPointsArray(): array
+    {
         return static::$endPoints;
     }
 }

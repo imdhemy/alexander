@@ -1,21 +1,18 @@
 <?php
 
 
-use Alexander\Http\Route\Route;
-use PHPUnit\Framework\TestCase;
-use Tests\InitWordpress;
+use Macedonia\Route\Route;
 
 /**
  * Class RouteTests
  */
-final class RouteTest extends TestCase
+final class RouteTest extends WP_UnitTestCase
 {
-    use InitWordpress;
-
     /**
      * @test
      */
-    function testCanAddGetEndpoint(): void {
+    function testCanAddGetEndpoint(): void
+    {
         $path = "/path";
         Route::get($path, 'Example@method');
         $this->assertEquals($path, Route::endPointsArray()[0]['route']);
@@ -24,8 +21,8 @@ final class RouteTest extends TestCase
     /**
      * @test
      */
-    function testCanRegisterEndpoints(): void {
-        $this->initWp();
+    function testCanRegisterEndpoints(): void
+    {
         Route::get('/foo', 'Example@foo');
         Route::post('/bar', 'Example@bar');
         $register = Route::register();

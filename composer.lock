@@ -43,7 +43,7 @@
             "dist": {
                 "type": "path",
                 "url": "components/alexander-http",
-                "reference": "8fb612c12e1a386484908ec8deadc524838fada4"
+                "reference": "84fc605a91cc3588f1a000079bc3947ac06398fb"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.5"
@@ -51,7 +51,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "AlexanderHttp\\": "src"
+                    "Macedonia\\": "src"
                 },
                 "classmap": [
                     "src/"
