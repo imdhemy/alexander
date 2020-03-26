@@ -73,7 +73,9 @@ class InstallWordPressTestsCommand extends Command
     {
         $installDb = strtolower($this->input->getOption('database'));
         $this->skipDataBaseCreation = $installDb === "false";
-        
+
+        $this->title("Install wordpress tests");
+        $this->info("This commands requires administrator credentials");
         $this->useTerminalAsAdmin();
         $this->runCommand();
     }
@@ -85,7 +87,7 @@ class InstallWordPressTestsCommand extends Command
     private function useTerminalAsAdmin()
     {
         if (strtoupper(PHP_OS) === 'WIN') {
-            $this->output->writeln("This command is not supported on Windows.");
+            $this->error("This command is not supported on Windows.");
         }
         (new Process(["sudo", "su"]))->run();
     }
@@ -95,13 +97,14 @@ class InstallWordPressTestsCommand extends Command
      */
     private function runCommand()
     {
+        $this->info("Process starts ..");
         $process = new Process($this->getCommandAttributes());
         $process->run();
         if ($process->isSuccessful()) {
-            $this->output->write($process->getOutput());
+            $this->success($process->getOutput());
             return;
         }
-        $this->output->write($process->getErrorOutput());
+        $this->error($process->getErrorOutput());
     }
 
     /**
