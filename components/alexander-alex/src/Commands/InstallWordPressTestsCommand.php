@@ -73,7 +73,7 @@ class InstallWordPressTestsCommand extends Command
     {
         $installDb = strtolower($this->input->getOption('database'));
         $this->skipDataBaseCreation = $installDb === "false";
-
+        
         $this->useTerminalAsAdmin();
         $this->runCommand();
     }
