@@ -31,7 +31,15 @@ class InstallWordPressTestsCommand extends Command
      *
      * @var string
      */
-    protected $description = "Generate the required files to run Wordpress PHPUnit tests, use --database=false to skip creating a test database";
+    protected $description = "Generates the required files to run Wordpress PHPUnit tests";
+
+
+    /**
+     * The console command help message
+     *
+     * @var string
+     */
+    protected $help = "use --database=false to skip creation of a test database.";
 
     /**
      * InstallWordPressTestsCommand constructor.

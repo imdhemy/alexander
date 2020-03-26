@@ -27,6 +27,13 @@ abstract class Command extends SymfonyCommand
     protected $description = "";
 
     /**
+     * The console command help message
+     *
+     * @var string
+     */
+    protected $help = "";
+
+    /**
      * @var InputInterface
      */
     protected $input;
@@ -43,6 +50,7 @@ abstract class Command extends SymfonyCommand
     {
         parent::__construct($this->signature);
         $this->setDescription($this->description);
+        $this->setHelp($this->help);
     }
 
     /**
