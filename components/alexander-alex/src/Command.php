@@ -103,6 +103,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Formats a list.
+     * @param array $elements
      */
     public function listing(array $elements)
     {
@@ -157,6 +158,16 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     public function note($message)
     {
         $this->io->note($message);
+    }
+
+    /**
+     * Formats a note admonition.
+     *
+     * @param string|array $message
+     */
+    public function info($message)
+    {
+        $this->note($message);
     }
 
     /**
