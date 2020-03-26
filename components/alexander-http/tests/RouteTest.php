@@ -1,7 +1,7 @@
 <?php
 
 
-use Macedonia\Route\Route;
+use Macedonia\Http\Route\Route;
 
 /**
  * Class RouteTests

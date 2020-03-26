@@ -1,6 +1,6 @@
 <?php
 
-namespace Macedonia\Route;
+namespace Macedonia\Http\Route;
 
 /**
  * Class Route
@@ -35,8 +35,8 @@ class Route implements RouteContract
     private static $endPoints = [];
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function get(string $path, string $handler): void
     {
@@ -45,8 +45,8 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function post(string $path, string $handler): void
     {
@@ -55,8 +55,8 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function put(string $path, string $handler): void
     {
@@ -65,8 +65,8 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function delete(string $path, string $handler): void
     {
@@ -75,8 +75,8 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function options(string $path, string $handler): void
     {
@@ -85,8 +85,8 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $handler
+     * @param string $path
+     * @param string $handler
      */
     public static function head(string $path, string $handler): void
     {
@@ -107,7 +107,7 @@ class Route implements RouteContract
             $namespace = static::$namespace;
             foreach ($endPoints as $endPoint) {
                 $route = $endPoint['route'];
-                $args  = $endPoint['args'];
+                $args = $endPoint['args'];
                 register_rest_route($namespace, $route, $args);
             }
         });
@@ -116,7 +116,7 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $namespace
+     * @param string $namespace
      */
     public static function setNamespace(string $namespace): void
     {
@@ -126,23 +126,23 @@ class Route implements RouteContract
     /**
      * Extracts callback elements
      *
-     * @param  string  $handler
+     * @param string $handler
      *
      * @return array['class', 'method']
      */
     private static function extractCallback(string $handler): array
     {
         $handlerParts = explode("@", $handler, 2);
-        $class        = $handlerParts[0];
-        $class        = static::controllerHasStandardNamespace($class) ?
+        $class = $handlerParts[0];
+        $class = static::controllerHasStandardNamespace($class) ?
             sprintf("%s\\%s", static::$controllersNamespace, $class) : $class;
-        $method       = $handlerParts[1];
+        $method = $handlerParts[1];
 
         return compact('class', 'method');
     }
 
     /**
-     * @param  string  $className
+     * @param string $className
      *
      * @return bool
      */
@@ -160,16 +160,16 @@ class Route implements RouteContract
     }
 
     /**
-     * @param  string  $route
-     * @param  array['class', 'method']  $callback
-     * @param  string  $httpMethod
+     * @param string $route
+     * @param array['class', 'method']  $callback
+     * @param string $httpMethod
      */
     private static function addEndPoint(string $route, array $callback, string $httpMethod): void
     {
-        $class               = $callback['class'];
-        $method              = $callback['method'];
-        $args                = [
-            'methods'  => $httpMethod,
+        $class = $callback['class'];
+        $method = $callback['method'];
+        $args = [
+            'methods' => $httpMethod,
             'callback' => [$class, $method],
         ];
         static::$endPoints[] = compact('route', 'args');

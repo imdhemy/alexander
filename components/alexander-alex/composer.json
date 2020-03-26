@@ -1,0 +1,22 @@
+{
+  "name": "imdhemy/alexander-alex",
+  "description": "Alex is the command line interface included with Alexander",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "imdhemy",
+      "email": "imdhemy@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Macedonia\\Alex\\": "src/"
+    }
+  },
+  "require": {
+    "symfony/console": "^5.0",
+    "symfony/process": "^5.0",
+    "vlucas/phpdotenv": "^4.1"
+  }
+}

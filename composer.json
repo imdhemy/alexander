@@ -12,7 +12,8 @@
   "require": {
     "imdhemy/alexander-http": "@dev",
     "imdhemy/alexander-helpers": "@dev",
-    "symfony/console": "^5.0"
+    "imdhemy/alexander-alex": "@dev",
+    "vlucas/phpdotenv": "^4.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.5",
@@ -42,6 +43,13 @@
     "alexander-helpers": {
       "type": "path",
       "url": "components/alexander-helpers",
+      "options": {
+        "symlink": true
+      }
+    },
+    "alexander-alex": {
+      "type": "path",
+      "url": "components/alexander-alex",
       "options": {
         "symlink": true
       }
