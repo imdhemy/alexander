@@ -37,6 +37,13 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     protected $help = "";
 
     /**
+     * Whether or not the command should be hidden from the list of commands
+     *
+     * @var bool
+     */
+    protected $hidden;
+
+    /**
      * @var InputInterface
      */
     protected $input;
@@ -59,6 +66,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
         parent::__construct($this->signature);
         $this->setDescription($this->description);
         $this->setHelp($this->help);
+        $this->setHidden((bool)$this->hidden);
     }
 
     /**
