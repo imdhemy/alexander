@@ -9,8 +9,8 @@ require_once __DIR__ . "/vendor/autoload.php";
 $dotEnv = Dotenv::createImmutable(__DIR__);
 $dotEnv->load();
 
-const COMMANDS_PATH = "/src/Commands";
-const COMMANDS_NAMESPACE = "\\Alexander\\Commands";
+const COMMANDS_PATH = "/src/Console";
+const COMMANDS_NAMESPACE = "\\Alexander\\Console";
 
 $console = Console::getInstance();
 $console->addCommandsDir(__DIR__ . COMMANDS_PATH, COMMANDS_NAMESPACE);
