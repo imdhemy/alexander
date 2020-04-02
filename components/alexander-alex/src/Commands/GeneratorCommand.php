@@ -64,8 +64,7 @@ class GeneratorCommand extends Command
     public function handle(): void
     {
         $name = $this->qualifyClass($this->getInputName());
-        // TODO: get path
-        $path = __DIR__ . "/Generated/{$name}.php";
+        $path = $this->getPath($name);
         // TODO: check if exists and handle force option
         $this->makeDirectory($path);
         $this->files->put($path, $this->buildClass($name));
@@ -89,7 +88,7 @@ class GeneratorCommand extends Command
      */
     protected function getRootNamespace(): string
     {
-        return "Alexander";
+        return "Alexander\\";
     }
 
     /**
@@ -108,6 +107,15 @@ class GeneratorCommand extends Command
     protected function getStub(): string
     {
         return __DIR__ . "/../../stubs/console.stub";
+    }
+
+    /**
+     * Get root namespace directory
+     * @return string
+     */
+    protected function getThemePath(): string
+    {
+        return realpath(__DIR__ . "/..");
     }
 
     /**
@@ -215,17 +223,28 @@ class GeneratorCommand extends Command
      */
     protected function qualifyClass(string $name): string
     {
-        var_dump($name);
         $name = ltrim($name, '\\/');
         $rootNamespace = $this->getRootNamespace();
 
         if (Str::startsWith($name, $rootNamespace)) {
             return $name;
         }
-        
+
         $name = str_replace('/', '\\', $name);
         return $this->qualifyClass(
             $this->getDefaultNamespace(trim($rootNamespace, '\\')) . '\\' . $name
         );
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function getPath(string $name): string
+    {
+        $name = Str::replaceFirst($this->getRootNamespace(), '', $name);
+        return sprintf("%s/%s.php", $this->getThemePath(), str_replace('\\', '/', $name));
     }
 }
