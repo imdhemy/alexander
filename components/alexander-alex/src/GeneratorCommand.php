@@ -1,29 +1,20 @@
 <?php
 
 
-namespace Macedonia\Alex\Commands;
-
+namespace Macedonia\Alex;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Macedonia\Alex\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class GeneratorCommand
- * @package Macedonia\Alex\Commands
+ * @package Macedonia\Alex
  */
-class GeneratorCommand extends Command
+abstract class GeneratorCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = "foo:bar";
-
     /**
      * Files system instance
      *
@@ -89,46 +80,31 @@ class GeneratorCommand extends Command
      * @param string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace(string $rootNamespace): string
-    {
-        return "{$rootNamespace}\Generated";
-    }
+    abstract protected function getDefaultNamespace(string $rootNamespace): string;
 
     /**
      * Get the root namespace of the class
      * @return string
      */
-    protected function getRootNamespace(): string
-    {
-        return "Alexander\\";
-    }
+    abstract protected function getRootNamespace(): string;
 
     /**
      * @return string
      */
-    protected function getUserProviderModel(): string
-    {
-        return "User";
-    }
+    abstract protected function getUserProviderModel(): string;
 
     /**
      * Get stub of the generated class
      *
      * @return string
      */
-    protected function getStub(): string
-    {
-        return __DIR__ . "/../../stubs/console.stub";
-    }
+    abstract protected function getStub(): string;
 
     /**
      * Get root namespace directory
      * @return string
      */
-    protected function getThemePath(): string
-    {
-        return realpath(__DIR__ . "/..");
-    }
+    abstract protected function getRootPath(): string;
 
     /**
      * Build the directory for the class if necessary.
@@ -160,8 +136,8 @@ class GeneratorCommand extends Command
     /**
      * Replace the namespace for the given stub.
      *
-     * @param string $stub
-     * @param string $name
+     * @param $stub
+     * @param $name
      * @return $this
      */
     protected function replaceNamespace(&$stub, $name): self
@@ -256,6 +232,6 @@ class GeneratorCommand extends Command
     protected function getPath(string $name): string
     {
         $name = Str::replaceFirst($this->getRootNamespace(), '', $name);
-        return sprintf("%s/%s.php", $this->getThemePath(), str_replace('\\', '/', $name));
+        return sprintf("%s/%s.php", $this->getRootPath(), str_replace('\\', '/', $name));
     }
 }
