@@ -22,7 +22,14 @@ class DummyClass extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'The console command description';
+
+    /**
+     * The console command help message
+     *
+     * @var string
+     */
+    protected $help = "The console command help message";
 
     /**
      * DummyClass constructor.
@@ -30,6 +37,15 @@ class DummyClass extends Command
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * Configures the current command.
+     */
+    protected function configure()
+    {
+        parent::configure();
+        //
     }
 
     /**
