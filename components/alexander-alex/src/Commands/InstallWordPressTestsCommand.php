@@ -69,7 +69,7 @@ class InstallWordPressTestsCommand extends Command
      *
      * @return void
      */
-    function handle(): void
+    public function handle(): void
     {
         $installDb = strtolower($this->input->getOption('database'));
         $this->skipDataBaseCreation = $installDb === "false";
