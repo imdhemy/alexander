@@ -89,7 +89,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
      *
      * @return void
      */
-    abstract function handle(): void;
+    abstract public function handle(): void;
 
     /**
      * Formats a command title.
@@ -293,5 +293,23 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     public function bar(int $max = 0, float $minSecondsBetweenRedraws = 0.1): ProgressBar
     {
         return new ProgressBar($this->output, $max, $minSecondsBetweenRedraws);
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public function getArgument(string $name): string
+    {
+        return $this->input->getArgument($name);
+    }
+
+    /**
+     * @param string $name
+     * @return string|null
+     */
+    public function getOption(string $name): string
+    {
+        return $this->input->getOption($name);
     }
 }
