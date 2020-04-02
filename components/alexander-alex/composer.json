@@ -17,6 +17,8 @@
   "require": {
     "symfony/console": "^5.0",
     "symfony/process": "^5.0",
-    "vlucas/phpdotenv": "^4.1"
+    "vlucas/phpdotenv": "^4.1",
+    "illuminate/support": "^7.3",
+    "illuminate/filesystem": "^7.3"
   }
 }
