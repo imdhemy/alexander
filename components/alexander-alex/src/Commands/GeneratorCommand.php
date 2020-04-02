@@ -9,6 +9,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Macedonia\Alex\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class GeneratorCommand
@@ -35,7 +36,7 @@ class GeneratorCommand extends Command
      *
      * @var string
      */
-    protected $type;
+    protected $type = "Class";
 
     /**
      * GeneratorCommand constructor.
@@ -53,6 +54,12 @@ class GeneratorCommand extends Command
     {
         parent::configure();
         $this->addArgument('name', InputArgument::REQUIRED);
+        $this->addOption(
+            'force',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            "Should override the existent class?",
+            false);
     }
 
     /**
@@ -65,7 +72,12 @@ class GeneratorCommand extends Command
     {
         $name = $this->qualifyClass($this->getInputName());
         $path = $this->getPath($name);
-        // TODO: check if exists and handle force option
+
+        if ($this->files->exists($path) && !$this->shouldForce()) {
+            $this->error("{$this->type} already exists.");
+            return;
+        }
+
         $this->makeDirectory($path);
         $this->files->put($path, $this->buildClass($name));
         $this->success($this->type . ' created successfully.');
@@ -79,7 +91,7 @@ class GeneratorCommand extends Command
      */
     protected function getDefaultNamespace(string $rootNamespace): string
     {
-        return "{$rootNamespace}\Commands";
+        return "{$rootNamespace}\Generated";
     }
 
     /**
@@ -116,17 +128,6 @@ class GeneratorCommand extends Command
     protected function getThemePath(): string
     {
         return realpath(__DIR__ . "/..");
-    }
-
-    /**
-     * Determine if the class already exists.
-     *
-     * @param string $rawName
-     * @return bool
-     */
-    protected function alreadyExists($rawName): bool
-    {
-        return false;
     }
 
     /**
@@ -202,6 +203,16 @@ class GeneratorCommand extends Command
     public function getInputName(): string
     {
         return $this->getArgument('name');
+    }
+
+    /**
+     * Determine if the creation of the class should be forced
+     *
+     * @return bool
+     */
+    public function shouldForce(): bool
+    {
+        return $this->input->hasParameterOption("--force") || $this->input->hasParameterOption("-f");
     }
 
     /**
