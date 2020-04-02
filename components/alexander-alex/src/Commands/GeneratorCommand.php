@@ -6,6 +6,7 @@ namespace Macedonia\Alex\Commands;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 use Macedonia\Alex\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -55,6 +56,34 @@ class GeneratorCommand extends Command
     }
 
     /**
+     * Execute the console command.
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    public function handle(): void
+    {
+        $name = $this->qualifyClass($this->getInputName());
+        // TODO: get path
+        $path = __DIR__ . "/Generated/{$name}.php";
+        // TODO: check if exists and handle force option
+        $this->makeDirectory($path);
+        $this->files->put($path, $this->buildClass($name));
+        $this->success($this->type . ' created successfully.');
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param string $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace(string $rootNamespace): string
+    {
+        return "{$rootNamespace}\Commands";
+    }
+
+    /**
      * Get the root namespace of the class
      * @return string
      */
@@ -82,25 +111,6 @@ class GeneratorCommand extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return void
-     * @throws FileNotFoundException
-     */
-    public function handle(): void
-    {
-        // TODO: qualifyClass
-        $name = "Alexander\\" . $this->getInputName();
-        // TODO: get path
-        $path = __DIR__ . "/Generated/{$name}.php";
-        // TODO: check if exists and handle force option
-        $this->makeDirectory($path);
-        $this->files->put($path, $this->buildClass($name));
-        $this->success($this->type . ' created successfully.');
-    }
-
-
-    /**
      * Determine if the class already exists.
      *
      * @param string $rawName
@@ -122,7 +132,6 @@ class GeneratorCommand extends Command
         if (!$this->files->isDirectory(dirname($path))) {
             $this->files->makeDirectory(dirname($path), 0777, true, true);
         }
-
         return $path;
     }
 
@@ -196,5 +205,27 @@ class GeneratorCommand extends Command
     protected function getNamespace(string $name): string
     {
         return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
+    }
+
+    /**
+     * Parse the class name and format according to the root namespace.
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function qualifyClass(string $name): string
+    {
+        var_dump($name);
+        $name = ltrim($name, '\\/');
+        $rootNamespace = $this->getRootNamespace();
+
+        if (Str::startsWith($name, $rootNamespace)) {
+            return $name;
+        }
+        
+        $name = str_replace('/', '\\', $name);
+        return $this->qualifyClass(
+            $this->getDefaultNamespace(trim($rootNamespace, '\\')) . '\\' . $name
+        );
     }
 }
