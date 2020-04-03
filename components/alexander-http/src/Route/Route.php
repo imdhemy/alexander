@@ -102,12 +102,11 @@ class Route implements RouteContract
     public static function register(): bool
     {
         $endPoints = static::$endPoints;
-
         add_action('rest_api_init', function () use ($endPoints) {
-            $namespace = static::$namespace;
             foreach ($endPoints as $endPoint) {
                 $route = $endPoint['route'];
                 $args = $endPoint['args'];
+                $namespace = $args['namespace'];
                 register_rest_route($namespace, $route, $args);
             }
         });
@@ -169,8 +168,9 @@ class Route implements RouteContract
         $class = $callback['class'];
         $method = $callback['method'];
         $args = [
+            'namespace' => static::$namespace,
             'methods' => $httpMethod,
-            'callback' => [$class, $method],
+            'callback' => [$class, $method]
         ];
         static::$endPoints[] = compact('route', 'args');
     }
@@ -178,8 +178,16 @@ class Route implements RouteContract
     /**
      * @return array
      */
-    public static function endPointsArray(): array
+    public static function getEndPointsArray(): array
     {
         return static::$endPoints;
+    }
+
+    /**
+     * @param string $controllersNamespace
+     */
+    public static function setControllersNamespace(string $controllersNamespace): void
+    {
+        self::$controllersNamespace = $controllersNamespace;
     }
 }
