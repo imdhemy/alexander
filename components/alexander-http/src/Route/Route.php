@@ -104,10 +104,10 @@ class Route implements RouteContract
         $endPoints = static::$endPoints;
         add_action('rest_api_init', function () use ($endPoints) {
             foreach ($endPoints as $endPoint) {
-                $route = $endPoint['route'];
+                $path = $endPoint['path'];
                 $args = $endPoint['args'];
                 $namespace = $args['namespace'];
-                register_rest_route($namespace, $route, $args);
+                register_rest_route($namespace, $path, $args);
             }
         });
 
