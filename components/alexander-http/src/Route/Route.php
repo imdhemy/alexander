@@ -102,13 +102,12 @@ class Route implements RouteContract
     public static function register(): bool
     {
         $endPoints = static::$endPoints;
-
         add_action('rest_api_init', function () use ($endPoints) {
-            $namespace = static::$namespace;
             foreach ($endPoints as $endPoint) {
-                $route = $endPoint['route'];
+                $path = $endPoint['path'];
                 $args = $endPoint['args'];
-                register_rest_route($namespace, $route, $args);
+                $namespace = $args['namespace'];
+                register_rest_route($namespace, $path, $args);
             }
         });
 
@@ -160,26 +159,46 @@ class Route implements RouteContract
     }
 
     /**
-     * @param string $route
+     * @param string $path
      * @param array['class', 'method']  $callback
      * @param string $httpMethod
      */
-    private static function addEndPoint(string $route, array $callback, string $httpMethod): void
+    private static function addEndPoint(string $path, array $callback, string $httpMethod): void
     {
+        $path = static::qualifyPath($path);
         $class = $callback['class'];
         $method = $callback['method'];
         $args = [
+            'namespace' => static::$namespace,
             'methods' => $httpMethod,
-            'callback' => [$class, $method],
+            'callback' => [$class, $method]
         ];
-        static::$endPoints[] = compact('route', 'args');
+        static::$endPoints[] = compact('path', 'args');
     }
 
     /**
      * @return array
      */
-    public static function endPointsArray(): array
+    public static function getEndPointsArray(): array
     {
         return static::$endPoints;
+    }
+
+    /**
+     * @param string $controllersNamespace
+     */
+    public static function setControllersNamespace(string $controllersNamespace): void
+    {
+        self::$controllersNamespace = $controllersNamespace;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function qualifyPath(string $path): string
+    {
+        // TODO: implement qualifyPath()
+        return $path;
     }
 }
