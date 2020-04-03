@@ -2,4 +2,4 @@
 
 use Macedonia\Http\Route\Route;
 
-Route::get('/', 'Homecontroller@index');
+Route::get('/home', 'Homecontroller@index');
