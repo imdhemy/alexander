@@ -41,4 +41,12 @@ final class RouteTest extends \Tests\TestCase
         Route::get('/bar', 'Example@bar');
         $this->assertTrue(Route::register());
     }
+
+    /**
+     * @test
+     */
+    function test_can_add_variables_in_routes()
+    {
+        $this->assertTrue(true);
+    }
 }

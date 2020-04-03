@@ -159,12 +159,13 @@ class Route implements RouteContract
     }
 
     /**
-     * @param string $route
+     * @param string $path
      * @param array['class', 'method']  $callback
      * @param string $httpMethod
      */
-    private static function addEndPoint(string $route, array $callback, string $httpMethod): void
+    private static function addEndPoint(string $path, array $callback, string $httpMethod): void
     {
+        $path = static::qualifyPath($path);
         $class = $callback['class'];
         $method = $callback['method'];
         $args = [
@@ -172,7 +173,7 @@ class Route implements RouteContract
             'methods' => $httpMethod,
             'callback' => [$class, $method]
         ];
-        static::$endPoints[] = compact('route', 'args');
+        static::$endPoints[] = compact('path', 'args');
     }
 
     /**
@@ -189,5 +190,15 @@ class Route implements RouteContract
     public static function setControllersNamespace(string $controllersNamespace): void
     {
         self::$controllersNamespace = $controllersNamespace;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function qualifyPath(string $path): string
+    {
+        // TODO: implement qualifyPath()
+        return $path;
     }
 }
