@@ -24,6 +24,11 @@ class Console
     private static $instance;
 
     /**
+     * @var string The root directory of the root namespace
+     */
+    private $rootNamespaceDir;
+
+    /**
      * Console constructor.
      */
     private function __construct()
@@ -115,5 +120,21 @@ class Console
             return null;
         }, $classNames);
         return array_filter($commandObjects);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootNamespaceDir(): string
+    {
+        return $this->rootNamespaceDir;
+    }
+
+    /**
+     * @param string $rootNamespaceDir
+     */
+    public function setRootNamespaceDir(string $rootNamespaceDir): void
+    {
+        $this->rootNamespaceDir = $rootNamespaceDir;
     }
 }

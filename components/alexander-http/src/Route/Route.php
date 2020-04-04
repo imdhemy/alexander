@@ -107,7 +107,7 @@ class Route implements RouteContract
                 $path = $endPoint['path'];
                 $args = $endPoint['args'];
                 $namespace = $args['namespace'];
-                register_rest_route($namespace, $path, $args);
+                register_rest_route($namespace, $path, $args, true);
             }
         });
 

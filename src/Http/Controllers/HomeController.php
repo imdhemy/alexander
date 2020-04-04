@@ -6,7 +6,7 @@ namespace Alexander\Http\Controllers;
 
 class HomeController
 {
-    public function index()
+    public static function index()
     {
         $message = "Welcome, to Alexander!";
         return compact('message');
