@@ -13,6 +13,7 @@ const COMMANDS_PATH = "/src/Console";
 const COMMANDS_NAMESPACE = "\\Alexander\\Console";
 
 $console = Console::getInstance();
+$console->setRootNamespaceDir(__DIR__ . "/src");
 $console->addCommandsDir(__DIR__ . COMMANDS_PATH, COMMANDS_NAMESPACE);
 
 try {
