@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Macedonia\Http\Route;
 
 /**
- * Interface RouteContract
- * @package Alexander\Http\Route
+ * Interface RouteContract.
  */
 interface RouteContract
 {
@@ -47,6 +45,7 @@ interface RouteContract
 
     /**
      * Registers a REST API route.
+     *
      * @return bool
      */
     public static function register(): bool;

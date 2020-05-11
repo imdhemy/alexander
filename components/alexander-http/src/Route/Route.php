@@ -3,14 +3,12 @@
 namespace Macedonia\Http\Route;
 
 /**
- * Class Route
- * @package Alexander\Http\Route
+ * Class Route.
  */
 class Route implements RouteContract
 {
-
     /**
-     * Method names
+     * Method names.
      */
     const GET = 'GET';
     const POST = 'POST';
@@ -22,7 +20,7 @@ class Route implements RouteContract
     /**
      * @var string
      */
-    private static $namespace = "alexander";
+    private static $namespace = 'alexander';
 
     /**
      * @var string
@@ -123,7 +121,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Extracts callback elements
+     * Extracts callback elements.
      *
      * @param string $handler
      *
@@ -131,10 +129,10 @@ class Route implements RouteContract
      */
     private static function extractCallback(string $handler): array
     {
-        $handlerParts = explode("@", $handler, 2);
+        $handlerParts = explode('@', $handler, 2);
         $class = $handlerParts[0];
         $class = static::controllerHasStandardNamespace($class) ?
-            sprintf("%s\\%s", static::$controllersNamespace, $class) : $class;
+            sprintf('%s\\%s', static::$controllersNamespace, $class) : $class;
         $method = $handlerParts[1];
 
         return compact('class', 'method');
@@ -147,7 +145,7 @@ class Route implements RouteContract
      */
     private static function controllerHasStandardNamespace(string $className): bool
     {
-        $namespace = str_replace($className, $className, "");
+        $namespace = str_replace($className, $className, '');
         if (empty($namespace)) {
             return true;
         }
@@ -159,9 +157,9 @@ class Route implements RouteContract
     }
 
     /**
-     * @param string $path
-     * @param array['class', 'method']  $callback
-     * @param string $httpMethod
+     * @param string                   $path
+     * @param array['class', 'method'] $callback
+     * @param string                   $httpMethod
      */
     private static function addEndPoint(string $path, array $callback, string $httpMethod): void
     {
@@ -170,8 +168,8 @@ class Route implements RouteContract
         $method = $callback['method'];
         $args = [
             'namespace' => static::$namespace,
-            'methods' => $httpMethod,
-            'callback' => [$class, $method]
+            'methods'   => $httpMethod,
+            'callback'  => [$class, $method],
         ];
         static::$endPoints[] = compact('path', 'args');
     }
@@ -194,6 +192,7 @@ class Route implements RouteContract
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public static function qualifyPath(string $path): string

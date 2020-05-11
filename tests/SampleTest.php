@@ -1,19 +1,17 @@
 <?php
 /**
- * Class SampleTest
- *
- * @package Alexander
+ * Class SampleTest.
  */
 
 use Tests\TestCase;
 
 /**
  * Sample test case.
+ *
  * @group sample
  */
 class SampleTest extends TestCase
 {
-
     /**
      * A single example test.
      */

@@ -1,10 +1,10 @@
 <?php
 
-
 use Macedonia\Http\Route\Route;
 
 /**
- * Class RouteTests
+ * Class RouteTests.
+ *
  * @group route
  */
 final class RouteTest extends \Tests\TestCase
@@ -12,9 +12,9 @@ final class RouteTest extends \Tests\TestCase
     /**
      * @test
      */
-    function testCanAddGetEndpoint(): void
+    public function testCanAddGetEndpoint(): void
     {
-        $path = "/path";
+        $path = '/path';
         Route::get($path, 'Example@method');
         $this->assertEquals($path, Route::getEndPointsArray()[0]['route']);
     }
@@ -22,7 +22,7 @@ final class RouteTest extends \Tests\TestCase
     /**
      * @test
      */
-    function testCanRegisterEndpoints(): void
+    public function testCanRegisterEndpoints(): void
     {
         Route::get('/foo', 'Example@foo');
         Route::post('/bar', 'Example@bar');
@@ -33,7 +33,7 @@ final class RouteTest extends \Tests\TestCase
     /**
      * @test
      */
-    function test_can_register_multiple_namespaces()
+    public function test_can_register_multiple_namespaces()
     {
         Route::setNamespace('my-namespace');
         Route::get('/foo', 'Example@foo');
@@ -45,7 +45,7 @@ final class RouteTest extends \Tests\TestCase
     /**
      * @test
      */
-    function test_can_add_variables_in_routes()
+    public function test_can_add_variables_in_routes()
     {
         $this->assertTrue(true);
     }
