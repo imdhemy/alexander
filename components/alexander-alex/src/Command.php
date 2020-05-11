@@ -10,8 +10,7 @@ use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Class Command
- * @package Macedonia\Alex
+ * Class Command.
  */
 abstract class Command extends SymfonyCommand implements StyleInterface
 {
@@ -20,24 +19,24 @@ abstract class Command extends SymfonyCommand implements StyleInterface
      *
      * @var string
      */
-    protected $signature = "command:name";
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "";
+    protected $description = '';
 
     /**
-     * The console command help message
+     * The console command help message.
      *
      * @var string
      */
-    protected $help = "";
+    protected $help = '';
 
     /**
-     * Whether or not the command should be hidden from the list of commands
+     * Whether or not the command should be hidden from the list of commands.
      *
      * @var bool
      */
@@ -66,11 +65,11 @@ abstract class Command extends SymfonyCommand implements StyleInterface
         parent::__construct($this->signature);
         $this->setDescription($this->description);
         $this->setHelp($this->help);
-        $this->setHidden((bool)$this->hidden);
+        $this->setHidden((bool) $this->hidden);
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int|void
@@ -81,6 +80,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
         $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
         $this->handle();
+
         return 0;
     }
 
@@ -93,6 +93,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Formats a command title.
+     *
      * @param string $message
      */
     public function title(string $message)
@@ -102,6 +103,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Formats a section title.
+     *
      * @param string $message
      */
     public function section(string $message)
@@ -111,6 +113,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Formats a list.
+     *
      * @param array $elements
      */
     public function listing(array $elements)
@@ -190,6 +193,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Formats a table.
+     *
      * @param array $headers
      * @param array $rows
      */
@@ -201,9 +205,10 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     /**
      * Asks a question.
      *
-     * @param string $question
-     * @param string|null $default
+     * @param string        $question
+     * @param string|null   $default
      * @param callable|null $validator
+     *
      * @return mixed
      */
     public function ask(string $question, ?string $default = null, callable $validator = null)
@@ -214,8 +219,9 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     /**
      * Asks a question with the user input hidden.
      *
-     * @param string $question
+     * @param string        $question
      * @param callable|null $validator
+     *
      * @return mixed
      */
     public function askHidden(string $question, callable $validator = null)
@@ -227,7 +233,8 @@ abstract class Command extends SymfonyCommand implements StyleInterface
      * Asks for confirmation.
      *
      * @param string $question
-     * @param bool $default
+     * @param bool   $default
+     *
      * @return void
      */
     public function confirm(string $question, bool $default = true)
@@ -238,8 +245,8 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     /**
      * Asks a choice question.
      *
-     * @param string $question
-     * @param array $choices
+     * @param string          $question
+     * @param array           $choices
      * @param string|int|null $default
      *
      * @return mixed
@@ -251,7 +258,9 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Add newline(s).
+     *
      * @param int $count
+     *
      * @return void
      */
     public function newLine(int $count = 1)
@@ -261,6 +270,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Starts the progress output.
+     *
      * @param int $max
      */
     public function progressStart(int $max = 0)
@@ -270,6 +280,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * Advances the progress output X steps.
+     *
      * @param int $step
      */
     public function progressAdvance(int $step = 1)
@@ -286,8 +297,9 @@ abstract class Command extends SymfonyCommand implements StyleInterface
     }
 
     /**
-     * @param int $max
+     * @param int   $max
      * @param float $minSecondsBetweenRedraws
+     *
      * @return ProgressBar
      */
     public function bar(int $max = 0, float $minSecondsBetweenRedraws = 0.1): ProgressBar
@@ -297,6 +309,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * @param string $name
+     *
      * @return string
      */
     public function getArgument(string $name): string
@@ -306,6 +319,7 @@ abstract class Command extends SymfonyCommand implements StyleInterface
 
     /**
      * @param string $name
+     *
      * @return string|null
      */
     public function getOption(string $name): string

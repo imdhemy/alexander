@@ -1,51 +1,50 @@
 <?php
 
-
 namespace Macedonia\Alex\Commands;
-
 
 use Macedonia\Alex\Console;
 use Macedonia\Alex\GeneratorCommand;
 
 /**
- * Class ControllerMakeCommand
- * @package Macedonia\Alex\Commands
+ * Class ControllerMakeCommand.
  */
 class ControllerMakeCommand extends GeneratorCommand
 {
     /**
      * @var string The Console command signature
      */
-    protected $signature = "make:controller";
+    protected $signature = 'make:controller';
 
     /**
      * @var string The console command description
      */
-    protected $description = "Creates a new controller class.";
+    protected $description = 'Creates a new controller class.';
 
     /**
      * @var string The console command help message
      */
-    protected $help = "Creates a new class controller with the specified <name> argument.";
+    protected $help = 'Creates a new class controller with the specified <name> argument.';
 
     /**
      * Get the default namespace for the class.
      *
      * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace(string $rootNamespace): string
     {
-        return $rootNamespace . "\\Http\\Controllers";
+        return $rootNamespace.'\\Http\\Controllers';
     }
 
     /**
-     * Get the root namespace of the class
+     * Get the root namespace of the class.
+     *
      * @return string
      */
     protected function getRootNamespace(): string
     {
-        return "Alexander";
+        return 'Alexander';
     }
 
     /**
@@ -53,21 +52,22 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function getUserProviderModel(): string
     {
-        return "";
+        return '';
     }
 
     /**
-     * Get stub of the generated class
+     * Get stub of the generated class.
      *
      * @return string
      */
     protected function getStub(): string
     {
-        return __DIR__ . "/../../stubs/controller.stub";
+        return __DIR__.'/../../stubs/controller.stub';
     }
 
     /**
-     * Get root namespace directory
+     * Get root namespace directory.
+     *
      * @return string
      */
     protected function getRootPath(): string

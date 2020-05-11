@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Macedonia\Alex;
 
 use Exception;
@@ -8,8 +7,7 @@ use ReflectionClass;
 use Symfony\Component\Console\Application;
 
 /**
- * Class Console
- * @package Macedonia\Alex
+ * Class Console.
  */
 class Console
 {
@@ -44,33 +42,39 @@ class Console
         if (is_null(static::$instance)) {
             static::$instance = (new self())->registerDefaultCommands();
         }
+
         return static::$instance;
     }
 
     /**
      * @param array $commands
+     *
      * @return Console
      */
     public function addCommands(array $commands): self
     {
         $this->console->addCommands($commands);
+
         return $this;
     }
 
     /**
      * @param string $dir
      * @param string $namespace
+     *
      * @return $this
      */
     public function addCommandsDir(string $dir, string $namespace): self
     {
         $this->addCommands($this->createCommandObjectsFromDir($dir, $namespace));
+
         return $this;
     }
 
     /**
-     * @return int
      * @throws Exception
+     *
+     * @return int
      */
     public function run(): int
     {
@@ -82,30 +86,34 @@ class Console
      */
     private function registerDefaultCommands(): self
     {
-        $dir = __DIR__ . "/Commands";
-        $namespace = "\\Macedonia\\Alex\\Commands";
+        $dir = __DIR__.'/Commands';
+        $namespace = '\\Macedonia\\Alex\\Commands';
         $this->addCommandsDir($dir, $namespace);
+
         return $this;
     }
 
     /**
-     * Get class names from the specified directory
+     * Get class names from the specified directory.
      *
      * @param string $dir
+     *
      * @return array
      */
     private function getClassNamesFromDirectory(string $dir): array
     {
         $pattern = "{$dir}/*.php";
         $files = glob($pattern);
+
         return array_map(function ($path) {
-            return basename($path, ".php");
+            return basename($path, '.php');
         }, $files);
     }
 
     /**
      * @param string $dir
      * @param string $namespace
+     *
      * @return array
      */
     private function createCommandObjectsFromDir(string $dir, string $namespace): array
@@ -117,8 +125,10 @@ class Console
             if ($reflectionClass->isInstantiable()) {
                 return new $class();
             }
+
             return null;
         }, $classNames);
+
         return array_filter($commandObjects);
     }
 
