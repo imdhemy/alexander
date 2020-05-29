@@ -2,30 +2,30 @@
 /**
  * PHPUnit bootstrap file.
  */
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-$_tests_dir = realpath(__DIR__ . '/../tmp/wordpress-tests-lib');
+$_tests_dir = realpath(__DIR__.'/../tmp/wordpress-tests-lib');
 
 //if ( ! $_tests_dir) {
 //    $_tests_dir = rtrim(sys_get_temp_dir(), '/\\').'/wordpress-tests-lib';
 //}
 
-if ( ! file_exists($_tests_dir . '/includes/functions.php')) {
-    echo "Could not find $_tests_dir/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL;
+if (!file_exists($_tests_dir.'/includes/functions.php')) {
+    echo "Could not find $_tests_dir/includes/functions.php, have you run bin/install-wp-tests.sh ?".PHP_EOL;
     exit(1);
 }
 
 // Give access to tests_add_filter() function.
-require_once $_tests_dir . '/includes/functions.php';
+require_once $_tests_dir.'/includes/functions.php';
 
 /**
  * Registers theme.
  */
 function _register_theme()
 {
-    $theme_dir     = dirname(__DIR__);
+    $theme_dir = dirname(__DIR__);
     $current_theme = basename($theme_dir);
-    $theme_root    = dirname($theme_dir);
+    $theme_root = dirname($theme_dir);
 
     add_filter('theme_root', function () use ($theme_root) {
         return $theme_root;
@@ -45,4 +45,4 @@ function _register_theme()
 tests_add_filter('plugins_loaded', '_register_theme');
 
 // Start up the WP testing environment.
-require $_tests_dir . '/includes/bootstrap.php';
+require $_tests_dir.'/includes/bootstrap.php';
