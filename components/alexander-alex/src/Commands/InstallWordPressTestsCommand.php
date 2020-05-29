@@ -5,6 +5,7 @@ namespace Macedonia\Alex\Commands;
 use Macedonia\Alex\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
+use function dd;
 
 /**
  * Class InstallWordPressTestsCommand.
@@ -113,7 +114,7 @@ class InstallWordPressTestsCommand extends Command
         $database = env('DB_NAME', 'wordpress_test');
         $user = env('DB_USER', 'root');
         $password = env('DB_PASSWORD', '');
-        $host = env('DB_Host', 'localhost');
+        $host = env('DB_HOST', 'localhost');
         $version = env('WP_VERSION', 'latest');
         $command = realpath(__DIR__.'/../../bin/install-wp-tests.sh');
         $commandAttributes = [$command, $database, $user, $password, $host, $version];
