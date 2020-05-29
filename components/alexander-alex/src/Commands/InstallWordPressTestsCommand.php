@@ -2,125 +2,185 @@
 
 namespace Macedonia\Alex\Commands;
 
+use Illuminate\Filesystem\Filesystem;
 use Macedonia\Alex\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
+use function basename;
+use function in_array;
+use function realpath;
+use function str_replace;
 
 /**
  * Class InstallWordPressTestsCommand.
  */
-class InstallWordPressTestsCommand extends Command
-{
-    /**
-     * @var bool
-     */
-    private $skipDataBaseCreation;
+class InstallWordPressTestsCommand extends Command {
 
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'make:tests';
+	const TMP_WORDPRESS_THEMES = "./tmp/wordpress/wp-content/themes/%s";
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generates the required files to run Wordpress PHPUnit tests';
+	const EXCLUDED_DIR = [
+		'./vendor',
+		'./tmp'
+	];
 
-    /**
-     * The console command help message.
-     *
-     * @var string
-     */
-    protected $help = 'use --database=false to skip creation of a test database.';
+	/**
+	 * @var bool
+	 */
+	private $skipDataBaseCreation;
 
-    /**
-     * InstallWordPressTestsCommand constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->skipDataBaseCreation = false;
-    }
+	/**
+	 * The name and signature of the console command.
+	 *
+	 * @var string
+	 */
+	protected $signature = 'make:tests';
 
-    /**
-     * Configures the current command.
-     */
-    protected function configure()
-    {
-        parent::configure();
-        $this->addOption(
-            'database',
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Create database or not',
-            InputOption::VALUE_NONE
-        );
-    }
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Generates the required files to run Wordpress PHPUnit tests';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle(): void
-    {
-        $installDb                  = strtolower($this->input->getOption('database'));
-        $this->skipDataBaseCreation = $installDb === 'false';
+	/**
+	 * The console command help message.
+	 *
+	 * @var string
+	 */
+	protected $help = 'use --database=false to skip creation of a test database.';
+	private $file_system;
 
-        $this->title('Install wordpress tests');
-        $this->info('This commands requires administrator credentials');
-        $this->useTerminalAsAdmin();
-        $this->runCommand();
-    }
+	/**
+	 * InstallWordPressTestsCommand constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+		$this->skipDataBaseCreation = false;
+		$this->file_system          = new Filesystem();
+	}
 
-    /**
-     * Use terminal as administrator.
-     *
-     * @void
-     */
-    private function useTerminalAsAdmin()
-    {
-        if (strtoupper(PHP_OS) === 'WIN') {
-            $this->error('This command is not supported on Windows.');
-        }
-        (new Process(['sudo', 'su']))->run();
-    }
+	/**
+	 * Configures the current command.
+	 */
+	protected function configure() {
+		parent::configure();
+		$this->addOption(
+			'database',
+			null,
+			InputOption::VALUE_OPTIONAL,
+			'Create database or not',
+			InputOption::VALUE_NONE
+		);
+	}
 
-    private function runCommand()
-    {
-        $this->info('Process starts ..');
-        $process = new Process($this->getCommandAttributes());
-        $process->run();
-        if ($process->isSuccessful()) {
-            $this->success($process->getOutput());
+	/**
+	 * Execute the console command.
+	 *
+	 * @return void
+	 */
+	public function handle(): void {
+		$installDb                  = strtolower( $this->input->getOption( 'database' ) );
+		$this->skipDataBaseCreation = $installDb === 'false';
 
-            return;
-        }
-        $this->error($process->getErrorOutput());
-    }
+		$this->title( 'Install wordpress tests' );
+		$this->info( 'This commands requires administrator credentials' );
+		$this->useTerminalAsAdmin();
+		$this->runCommand();
+		$this->copyTheme();
+	}
 
-    /**
-     * Get command attributes.
-     *
-     * @return array
-     */
-    private function getCommandAttributes(): array
-    {
-        $database          = env('DB_NAME', 'wordpress_test');
-        $user              = env('DB_USER', 'root');
-        $password          = env('DB_PASSWORD', '');
-        $host              = env('DB_HOST', 'localhost');
-        $version           = env('WP_VERSION', 'latest');
-        $command           = realpath(__DIR__ . '/../../bin/install-wp-tests.sh');
-        $commandAttributes = [$command, $database, $user, $password, $host, $version];
-        if ($this->skipDataBaseCreation) {
-            $commandAttributes[] = 'true';
-        }
+	/**
+	 * Use terminal as administrator.
+	 *
+	 * @void
+	 */
+	private function useTerminalAsAdmin() {
+		if ( strtoupper( PHP_OS ) === 'WIN' ) {
+			$this->error( 'This command is not supported on Windows.' );
+		}
+		( new Process( [ 'sudo', 'su' ] ) )->run();
+	}
 
-        return $commandAttributes;
-    }
+	/**
+	 * Run console command
+	 */
+	private function runCommand() {
+		$this->info( 'Process starts ..' );
+		$process = new Process( $this->getCommandAttributes() );
+		$process->run();
+		if ( $process->isSuccessful() ) {
+			$this->success( $process->getOutput() );
+
+			return;
+		}
+		$this->error( $process->getErrorOutput() );
+	}
+
+	/**
+	 * Get command attributes.
+	 *
+	 * @return array
+	 */
+	private function getCommandAttributes(): array {
+		$database          = env( 'DB_NAME', 'wordpress_test' );
+		$user              = env( 'DB_USER', 'root' );
+		$password          = env( 'DB_PASSWORD', '' );
+		$host              = env( 'DB_HOST', 'localhost' );
+		$version           = env( 'WP_VERSION', 'latest' );
+		$command           = realpath( __DIR__ . '/../../bin/install-wp-tests.sh' );
+		$commandAttributes = [ $command, $database, $user, $password, $host, $version ];
+		if ( $this->skipDataBaseCreation ) {
+			$commandAttributes[] = 'true';
+		}
+
+		return $commandAttributes;
+	}
+
+	/**
+	 * Copies theme files the generated wordpress directory
+	 */
+	private function copyTheme(): void {
+		$themeDir = $this->makeThemeDirectory();
+		$this->copyDirectories( $themeDir );
+		$this->copyFiles( $themeDir );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function makeThemeDirectory(): string {
+		$themeName      = env( 'THEME_NAME', 'alexander' );
+		$themeDirectory = sprintf( self::TMP_WORDPRESS_THEMES, $themeName );
+
+		if ( ! $this->file_system->exists( $themeDirectory ) ) {
+			$this->file_system->makeDirectory( $themeDirectory );
+		}
+
+		return $themeDirectory;
+	}
+
+	/**
+	 * @param string $themeDir
+	 */
+	private function copyDirectories( string $themeDir ): void {
+		$directories = $this->file_system->directories( '.' );
+		foreach ( $directories as $directory ) {
+			if ( ! in_array( $directory, self::EXCLUDED_DIR ) ) {
+				$newPath = $themeDir . str_replace( '.', '', $directory );
+				$this->file_system->copyDirectory( $directory, $newPath );
+			}
+		}
+	}
+
+	/**
+	 * @param string $themeDir
+	 */
+	private function copyFiles( string $themeDir ): void {
+		$files = $this->file_system->files( realpath( '.' ) );
+		foreach ( $files as $file ) {
+			$path   = $file->getRealPath();
+			$target = $themeDir . "/" . basename( $path );
+			$this->file_system->copy( $path, $target );
+		}
+	}
 }
