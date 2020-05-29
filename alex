@@ -6,19 +6,19 @@ use Macedonia\Alex\Console;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-$dotEnv = Dotenv::createImmutable(__DIR__);
+$dotEnv = Dotenv::createImmutable( __DIR__ );
 $dotEnv->load();
 
-const COMMANDS_PATH = "/src/Console";
+const COMMANDS_PATH      = "/src/Console";
 const COMMANDS_NAMESPACE = "\\Alexander\\Console";
 
 $console = Console::getInstance();
-$console->setRootNamespaceDir(__DIR__ . "/src");
-$console->addCommandsDir(__DIR__ . COMMANDS_PATH, COMMANDS_NAMESPACE);
+$console->setRootNamespaceDir( __DIR__ . "/src" );
+$console->addCommandsDir( __DIR__ . COMMANDS_PATH, COMMANDS_NAMESPACE );
 
 try {
-    $console->run();
-} catch (Exception $exception) {
-    echo $exception->getMessage();
-    exit(0);
+	$console->run();
+} catch ( Exception $exception ) {
+	echo $exception->getMessage();
+	exit( 0 );
 }
