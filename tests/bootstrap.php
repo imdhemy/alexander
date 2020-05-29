@@ -4,7 +4,7 @@
  */
 require_once __DIR__.'/../vendor/autoload.php';
 
-$_tests_dir = realpath( __DIR__.'/../tmp/wordpress-tests-lib');
+$_tests_dir = realpath(__DIR__.'/../tmp/wordpress-tests-lib');
 
 //if ( ! $_tests_dir) {
 //    $_tests_dir = rtrim(sys_get_temp_dir(), '/\\').'/wordpress-tests-lib';
