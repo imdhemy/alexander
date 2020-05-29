@@ -4,7 +4,7 @@
  */
 require_once __DIR__.'/../vendor/autoload.php';
 
-$_tests_dir = __DIR__.'/../tmp/wordpress-tests-lib';
+$_tests_dir = realpath( __DIR__.'/../tmp/wordpress-tests-lib');
 
 //if ( ! $_tests_dir) {
 //    $_tests_dir = rtrim(sys_get_temp_dir(), '/\\').'/wordpress-tests-lib';
@@ -36,6 +36,7 @@ function _register_theme()
     add_filter('pre_option_template', function () use ($current_theme) {
         return $current_theme;
     });
+
     add_filter('pre_option_stylesheet', function () use ($current_theme) {
         return $current_theme;
     });
