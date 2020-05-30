@@ -2,14 +2,14 @@
 
 namespace Macedonia\Alex\Commands;
 
-use Illuminate\Filesystem\Filesystem;
-use Macedonia\Alex\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
 use function basename;
+use Illuminate\Filesystem\Filesystem;
 use function in_array;
+use Macedonia\Alex\Command;
 use function realpath;
 use function str_replace;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Process\Process;
 
 /**
  * Class InstallWordPressTestsCommand.
@@ -56,7 +56,7 @@ class InstallWordPressTestsCommand extends Command
     {
         parent::__construct();
         $this->skipDataBaseCreation = false;
-        $this->file_system          = new Filesystem();
+        $this->file_system = new Filesystem();
     }
 
     /**
@@ -81,7 +81,7 @@ class InstallWordPressTestsCommand extends Command
      */
     public function handle(): void
     {
-        $installDb                  = strtolower($this->input->getOption('database'));
+        $installDb = strtolower($this->input->getOption('database'));
         $this->skipDataBaseCreation = $installDb === 'false';
 
         $this->title('Install wordpress tests');
@@ -127,12 +127,12 @@ class InstallWordPressTestsCommand extends Command
      */
     private function getCommandAttributes(): array
     {
-        $database          = env('DB_NAME', 'wordpress_test');
-        $user              = env('DB_USER', 'root');
-        $password          = env('DB_PASSWORD', '');
-        $host              = env('DB_HOST', 'localhost');
-        $version           = env('WP_VERSION', 'latest');
-        $command           = realpath(__DIR__ . '/../../bin/install-wp-tests.sh');
+        $database = env('DB_NAME', 'wordpress_test');
+        $user = env('DB_USER', 'root');
+        $password = env('DB_PASSWORD', '');
+        $host = env('DB_HOST', 'localhost');
+        $version = env('WP_VERSION', 'latest');
+        $command = realpath(__DIR__.'/../../bin/install-wp-tests.sh');
         $commandAttributes = [$command, $database, $user, $password, $host, $version];
         if ($this->skipDataBaseCreation) {
             $commandAttributes[] = 'true';
@@ -156,10 +156,10 @@ class InstallWordPressTestsCommand extends Command
      */
     private function makeThemeDirectory(): string
     {
-        $themeName      = env('THEME_NAME', 'alexander');
+        $themeName = env('THEME_NAME', 'alexander');
         $themeDirectory = sprintf(self::TMP_WORDPRESS_THEMES, $themeName);
 
-        if ( ! $this->file_system->exists($themeDirectory)) {
+        if (!$this->file_system->exists($themeDirectory)) {
             $this->file_system->makeDirectory($themeDirectory);
         }
 
@@ -173,8 +173,8 @@ class InstallWordPressTestsCommand extends Command
     {
         $directories = $this->file_system->directories('.');
         foreach ($directories as $directory) {
-            if ( ! in_array($directory, self::EXCLUDED_DIR)) {
-                $newPath = $themeDir . str_replace('.', '', $directory);
+            if (!in_array($directory, self::EXCLUDED_DIR)) {
+                $newPath = $themeDir.str_replace('.', '', $directory);
                 $this->file_system->copyDirectory($directory, $newPath);
             }
         }
@@ -187,8 +187,8 @@ class InstallWordPressTestsCommand extends Command
     {
         $files = $this->file_system->files(realpath('.'));
         foreach ($files as $file) {
-            $path   = $file->getRealPath();
-            $target = $themeDir . '/' . basename($path);
+            $path = $file->getRealPath();
+            $target = $themeDir.'/'.basename($path);
             $this->file_system->copy($path, $target);
         }
     }
