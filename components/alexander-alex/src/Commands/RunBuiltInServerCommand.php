@@ -6,8 +6,6 @@ namespace Macedonia\Alex\Commands;
 
 use Macedonia\Alex\Command;
 use Symfony\Component\Process\Process;
-use function dd;
-use function shell_exec;
 
 /**
  * Class RunBuiltInServerCommand
