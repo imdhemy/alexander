@@ -10,6 +10,7 @@
     }
   ],
   "require": {
+    "php": "^7.1.0",
     "imdhemy/alexander-http": "@dev",
     "imdhemy/alexander-helpers": "@dev",
     "imdhemy/alexander-alex": "@dev",
