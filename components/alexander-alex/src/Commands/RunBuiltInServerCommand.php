@@ -5,7 +5,6 @@ namespace Macedonia\Alex\Commands;
 
 
 use Macedonia\Alex\Command;
-use Symfony\Component\Process\Process;
 
 /**
  * Class RunBuiltInServerCommand
@@ -18,7 +17,7 @@ class RunBuiltInServerCommand extends Command
      *
      * @var string
      */
-    protected $signature = "serve";
+    protected $signature = 'serve';
 
     /**
      * The console command description.
@@ -28,13 +27,13 @@ class RunBuiltInServerCommand extends Command
     protected $description = 'Serve the application on the PHP development server';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle(): void
     {
-       $root_directory = "./tmp/wordpress";
-       $this->info("Alexander development server started: http://localhost:8080");
-       $output = shell_exec("php -S localhost:8080 -t $root_directory");
-       $this->newLine($output);
+        $root_directory = "./tmp/wordpress";
+        $this->info("Alexander development server started: http://localhost:8080");
+        $output = shell_exec("php -S localhost:8080 -t $root_directory");
+        $this->newLine($output);
     }
 }
