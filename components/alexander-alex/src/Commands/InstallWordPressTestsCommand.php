@@ -17,12 +17,12 @@ use Symfony\Component\Process\Process;
 class InstallWordPressTestsCommand extends Command
 {
     /**
-     * Tmp wordpress theme directory
+     * Tmp wordpress theme directory.
      */
     const TMP_WORDPRESS_THEMES = './tmp/wordpress/wp-content/themes/%s';
 
     /**
-     * Directories that are excluded from the copy process
+     * Directories that are excluded from the copy process.
      */
     const EXCLUDED_DIR = [
         './tmp',
