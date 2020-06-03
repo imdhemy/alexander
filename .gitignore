@@ -4,7 +4,6 @@ vendor/
 
 # Tests
 .phpunit.result.cache
-tmp/
 
 # Environment
 .env
