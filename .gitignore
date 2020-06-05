@@ -7,3 +7,6 @@ vendor/
 
 # Environment
 .env
+
+# Testing temp files
+tmp/
