@@ -9,4 +9,6 @@ vendor/
 .env
 
 # Testing temp files
-tmp/
+tmp/wordpress
+tmp/wordpress-tests-lib
+
