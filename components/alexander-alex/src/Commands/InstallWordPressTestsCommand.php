@@ -2,16 +2,16 @@
 
 namespace Macedonia\Alex\Commands;
 
+use function basename;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use function in_array;
 use Macedonia\Alex\Command;
 use Macedonia\Alex\Utils\InstallWordPressTests;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
-use function basename;
-use function in_array;
 use function realpath;
 use function str_replace;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Process\Process;
 
 /**
  * Class InstallWordPressTestsCommand.
@@ -89,8 +89,9 @@ class InstallWordPressTestsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      * @throws FileNotFoundException
+     *
+     * @return void
      */
     public function handle(): void
     {
@@ -158,7 +159,7 @@ class InstallWordPressTestsCommand extends Command
         $host = env('DB_HOST', 'localhost');
         $version = env('WP_VERSION', 'latest');
 
-        $command = realpath(__DIR__ . '/../../bin/install-wp-tests.sh');
+        $command = realpath(__DIR__.'/../../bin/install-wp-tests.sh');
         $commandAttributes = [$command, $database, $user, $password, $host, $version];
 
         if ($this->skipDataBaseCreation) {
@@ -201,7 +202,7 @@ class InstallWordPressTestsCommand extends Command
         $directories = $this->fileSystem->directories('.');
         foreach ($directories as $directory) {
             if (!in_array($directory, self::EXCLUDED_DIR)) {
-                $newPath = $themeDir . str_replace('.', '', $directory);
+                $newPath = $themeDir.str_replace('.', '', $directory);
                 $this->fileSystem->copyDirectory($directory, $newPath);
             }
         }
@@ -215,7 +216,7 @@ class InstallWordPressTestsCommand extends Command
         $files = $this->fileSystem->files(realpath('.'));
         foreach ($files as $file) {
             $path = $file->getRealPath();
-            $target = $themeDir . '/' . basename($path);
+            $target = $themeDir.'/'.basename($path);
             $this->fileSystem->copy($path, $target);
         }
     }
