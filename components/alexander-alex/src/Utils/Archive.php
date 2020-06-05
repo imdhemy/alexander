@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Macedonia\Alex\Utils;
-
 
 use ZipArchive;
 
@@ -24,6 +22,7 @@ class Archive
     /**
      * @param string $source
      * @param string $destination
+     *
      * @return bool
      */
     public function unzip(string $source, string $destination): bool
@@ -32,8 +31,10 @@ class Archive
         if ($resource) {
             $this->zipArchive->extractTo($destination);
             $this->zipArchive->close();
+
             return true;
         }
+
         return false;
     }
 }
