@@ -68,8 +68,9 @@ class InstallWordPressTestsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      * @throws FileNotFoundException
+     *
+     * @return void
      */
     public function handle(): void
     {
@@ -117,7 +118,7 @@ class InstallWordPressTestsCommand extends Command
         $directories = $this->fileSystem->directories('.');
         foreach ($directories as $directory) {
             if (!in_array($directory, self::EXCLUDED_DIR)) {
-                $newPath = $themeDir . str_replace('.', '', $directory);
+                $newPath = $themeDir.str_replace('.', '', $directory);
                 $this->fileSystem->copyDirectory($directory, $newPath);
             }
         }
@@ -131,7 +132,7 @@ class InstallWordPressTestsCommand extends Command
         $files = $this->fileSystem->files(realpath('.'));
         foreach ($files as $file) {
             $path = $file->getRealPath();
-            $target = $themeDir . '/' . basename($path);
+            $target = $themeDir.'/'.basename($path);
             $this->fileSystem->copy($path, $target);
         }
     }
