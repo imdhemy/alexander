@@ -2,16 +2,10 @@
 
 namespace Macedonia\Alex\Commands;
 
-use function basename;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use function in_array;
 use Macedonia\Alex\Command;
-use Macedonia\Alex\Utils\InstallWordPressTests;
-use function realpath;
-use function str_replace;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
+use Macedonia\Alex\Utils\WordPressTestsInstaller;
 
 /**
  * Class InstallWordPressTestsCommand.
@@ -29,11 +23,6 @@ class InstallWordPressTestsCommand extends Command
     const EXCLUDED_DIR = [
         './tmp',
     ];
-
-    /**
-     * @var bool
-     */
-    private $skipDataBaseCreation;
 
     /**
      * The name and signature of the console command.
@@ -54,7 +43,7 @@ class InstallWordPressTestsCommand extends Command
      *
      * @var string
      */
-    protected $help = 'use --database=false to skip creation of a test database.';
+    protected $help = 'Generates the required files to run Wordpress PHPUnit tests';
 
     /**
      * @var Filesystem
@@ -62,111 +51,37 @@ class InstallWordPressTestsCommand extends Command
     private $fileSystem;
 
     /**
+     * @var WordPressTestsInstaller
+     */
+    private $installer;
+
+    /**
      * InstallWordPressTestsCommand constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->skipDataBaseCreation = false;
         $this->fileSystem = new Filesystem();
-    }
-
-    /**
-     * Configures the current command.
-     */
-    protected function configure()
-    {
-        parent::configure();
-        $this->addOption(
-            'database',
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Create database or not',
-            InputOption::VALUE_NONE
-        );
+        $this->installer = new WordPressTestsInstaller();
     }
 
     /**
      * Execute the console command.
      *
-     * @throws FileNotFoundException
-     *
      * @return void
+     * @throws FileNotFoundException
      */
     public function handle(): void
     {
-        $installDb = strtolower($this->input->getOption('database'));
-        $this->skipDataBaseCreation = $installDb === 'false';
-
         $this->title('Install wordpress tests');
 
-        $installer = new InstallWordPressTests();
+        $this->extractFiles();
 
-        $this->info('Extracting wordpress files..');
-        $installer->extractFiles();
-        $this->success('Extracted wordpress files.');
+        $this->updateConfigs();
 
-        $this->info('Updating configuration based on environment values.');
-        $installer->updateConfig();
-        $this->success('Updated configuration successfully.');
-
-        $this->info('Installing theme..');
-        $this->copyTheme();
-        $this->success('Theme installed successfully..');
+        $this->installTheme();
 
         $this->success('There is nothing impossible to him who will try. ~ Alexander the Great');
-    }
-
-    /**
-     * Use terminal as administrator.
-     *
-     * @void
-     */
-    private function useTerminalAsAdmin()
-    {
-        if (strtoupper(PHP_OS) === 'WIN') {
-            $this->error('This command is not supported on Windows.');
-        }
-        (new Process(['sudo', 'su']))->run();
-    }
-
-    /**
-     * Run console command.
-     */
-    private function runShellCommand()
-    {
-        $this->info('Process starts ..');
-        $process = new Process($this->getCommandAttributes());
-        $process->run();
-        if ($process->isSuccessful()) {
-            $this->success($process->getOutput());
-
-            return;
-        }
-        $this->error($process->getErrorOutput());
-    }
-
-    /**
-     * Get command attributes.
-     *
-     * @return array
-     */
-    private function getCommandAttributes(): array
-    {
-        $database = env('DB_NAME', 'wordpress_test');
-        $user = env('DB_USER', 'root');
-        $password = env('DB_PASSWORD', '');
-        $host = env('DB_HOST', 'localhost');
-        $version = env('WP_VERSION', 'latest');
-
-        $command = realpath(__DIR__.'/../../bin/install-wp-tests.sh');
-        $commandAttributes = [$command, $database, $user, $password, $host, $version];
-
-        if ($this->skipDataBaseCreation) {
-            $commandAttributes[] = 'true';
-        }
-
-        return $commandAttributes;
     }
 
     /**
@@ -202,7 +117,7 @@ class InstallWordPressTestsCommand extends Command
         $directories = $this->fileSystem->directories('.');
         foreach ($directories as $directory) {
             if (!in_array($directory, self::EXCLUDED_DIR)) {
-                $newPath = $themeDir.str_replace('.', '', $directory);
+                $newPath = $themeDir . str_replace('.', '', $directory);
                 $this->fileSystem->copyDirectory($directory, $newPath);
             }
         }
@@ -216,8 +131,32 @@ class InstallWordPressTestsCommand extends Command
         $files = $this->fileSystem->files(realpath('.'));
         foreach ($files as $file) {
             $path = $file->getRealPath();
-            $target = $themeDir.'/'.basename($path);
+            $target = $themeDir . '/' . basename($path);
             $this->fileSystem->copy($path, $target);
         }
+    }
+
+    private function extractFiles(): void
+    {
+        $this->info('Extracting wordpress files..');
+        $this->installer->extractFiles();
+        $this->success('Extracted wordpress files.');
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    private function updateConfigs(): void
+    {
+        $this->info('Updating configuration based on environment values.');
+        $this->installer->updateConfig();
+        $this->success('Updated configuration successfully.');
+    }
+
+    private function installTheme(): void
+    {
+        $this->info('Installing theme..');
+        $this->copyTheme();
+        $this->success('Theme installed successfully..');
     }
 }

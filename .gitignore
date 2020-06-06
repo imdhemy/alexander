@@ -11,4 +11,5 @@ vendor/
 # Testing temp files
 tmp/wordpress
 tmp/wordpress-tests-lib
+tmp/__MACOSX
 
